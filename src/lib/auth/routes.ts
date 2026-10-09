@@ -11,6 +11,7 @@ export const AUTH_REQUIRED_PREFIXES = [
   "/orders",
   "/downloads",
   "/custom-projects/new",
+  "/custom-projects/requests",
 ] as const;
 
 export function requiresAuth(pathname: string): boolean {

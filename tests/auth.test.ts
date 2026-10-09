@@ -43,7 +43,7 @@ describe("safeNextPath (open-redirect protection)", () => {
 });
 
 describe("requiresAuth / isAdminPath", () => {
-  it.each(["/account", "/account/addresses", "/admin", "/admin/orders/5", "/cart", "/checkout", "/orders/abc", "/downloads", "/custom-projects/new"])(
+  it.each(["/account", "/account/addresses", "/admin", "/admin/orders/5", "/cart", "/checkout", "/orders/abc", "/downloads", "/custom-projects/new", "/custom-projects/requests", "/custom-projects/requests/abc"])(
     "protects %s",
     (p) => expect(requiresAuth(p)).toBe(true),
   );
