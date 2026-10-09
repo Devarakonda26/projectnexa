@@ -13,7 +13,7 @@ export const listingParamsSchema = z.object({
   q: opt(z.string().trim().max(100)),
   branch: opt(slug),
   category: opt(slug),
-  type: opt(z.enum(["digital", "hardware"])),
+  type: opt(z.enum(["digital", "hardware", "custom"])),
   difficulty: opt(z.enum(["beginner", "intermediate", "advanced"])),
   sort: opt(z.enum(SORT_OPTIONS)),
   page: z.preprocess(first, z.coerce.number().int().min(1).max(500).catch(1)),

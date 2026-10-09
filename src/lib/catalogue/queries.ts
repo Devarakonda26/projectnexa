@@ -12,6 +12,10 @@ export type ProductCard = {
   title: string;
   summary: string;
   product_type: "digital" | "hardware";
+  /** Custom services: shown with "Request a quote" instead of a cart button. */
+  is_quote_only: boolean;
+  /** Demonstration listing (not a real, built product). */
+  is_sample: boolean;
   price_paise: number;
   mrp_paise: number | null;
   difficulty: "beginner" | "intermediate" | "advanced" | null;
@@ -19,11 +23,12 @@ export type ProductCard = {
   cover_image_path: string | null;
   is_featured: boolean;
   branch: { slug: string; short_name: string } | null;
+  category?: { slug: string; name: string } | null;
   stock?: { in_stock: boolean; low_stock: boolean } | null;
 };
 
 const CARD_COLUMNS =
-  "id, slug, title, summary, product_type, price_paise, mrp_paise, difficulty, tech_stack, cover_image_path, is_featured, branch:branches(slug, short_name)";
+  "id, slug, title, summary, product_type, is_quote_only, is_sample, price_paise, mrp_paise, difficulty, tech_stack, cover_image_path, is_featured, branch:branches(slug, short_name), category:categories(slug, name)";
 
 /** Public client: anon key + cookies, RLS limits everything to published rows. */
 export async function listBranches(): Promise<Branch[]> {
@@ -77,6 +82,40 @@ export async function listFeatured(limit = 8): Promise<ProductCard[]> {
   return attachStock((data ?? []) as unknown as ProductCard[]);
 }
 
+/** Featured hardware kits (the "Featured hardware kits" home-page section). */
+export async function listFeaturedKits(limit = 4): Promise<ProductCard[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("products")
+    .select(CARD_COLUMNS)
+    .eq("status", "published")
+    .eq("product_type", "hardware")
+    .order("is_featured", { ascending: false })
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  return attachStock((data ?? []) as unknown as ProductCard[]);
+}
+
+/** Other published products from the same branch (same domain first), never the product itself. */
+export async function listRelated(product: { id: string; branchSlug: string | null; categorySlug: string | null }, limit = 4): Promise<ProductCard[]> {
+  if (!product.branchSlug) return [];
+  const found = await getBranch(product.branchSlug);
+  if (!found) return [];
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("products")
+    .select(CARD_COLUMNS)
+    .eq("status", "published")
+    .eq("branch_id", found.branch.id)
+    .neq("id", product.id)
+    .order("is_featured", { ascending: false })
+    .order("created_at", { ascending: false })
+    .limit(limit + 8);
+  const rows = (data ?? []) as unknown as ProductCard[];
+  rows.sort((x, y) => Number(y.category?.slug === product.categorySlug) - Number(x.category?.slug === product.categorySlug));
+  return attachStock(rows.slice(0, limit));
+}
+
 export async function searchProducts(params: ListingParams) {
   const supabase = await createClient();
   let branchId: string | undefined;
@@ -95,7 +134,9 @@ export async function searchProducts(params: ListingParams) {
   let query = supabase.from("products").select(CARD_COLUMNS, { count: "exact" }).eq("status", "published");
   if (branchId) query = query.eq("branch_id", branchId);
   if (categoryId) query = query.eq("category_id", categoryId);
-  if (params.type) query = query.eq("product_type", params.type);
+  if (params.type === "custom") query = query.eq("is_quote_only", true);
+  else if (params.type === "digital") query = query.eq("product_type", "digital").eq("is_quote_only", false);
+  else if (params.type === "hardware") query = query.eq("product_type", "hardware");
   if (params.difficulty) query = query.eq("difficulty", params.difficulty);
   if (params.min !== undefined) query = query.gte("price_paise", params.min * 100);
   if (params.max !== undefined) query = query.lte("price_paise", params.max * 100);
@@ -121,14 +162,22 @@ export type ProductDetail = ProductCard & {
   cod_eligible: boolean;
   weight_grams: number | null;
   tags: string[];
-  category: { slug: string; name: string } | null;
+  sku: string | null;
+  subdomain: string | null;
+  estimated_time: string | null;
+  features: string[];
+  deliverables: string[];
+  software_requirements: string[];
+  hardware_requirements: string[];
+  faq: { q: string; a: string }[];
+  gallery_paths: string[];
 };
 
 export async function getProductBySlug(slug: string): Promise<ProductDetail | null> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("products")
-    .select(`${CARD_COLUMNS}, description, weight_grams, cod_eligible, tags, category:categories(slug, name)`)
+    .select(`${CARD_COLUMNS}, description, weight_grams, cod_eligible, tags, sku, subdomain, estimated_time, features, deliverables, software_requirements, hardware_requirements, faq, gallery_paths`)
     .eq("slug", slug)
     .eq("status", "published")
     .maybeSingle();

@@ -9,7 +9,7 @@ export const metadata = { title: "Admin · Products", robots: { index: false } }
 async function List() {
   await requireAdmin("/admin/products");
   const supabase = await createClient();
-  const { data } = await supabase.from("products").select("id, title, slug, product_type, status, price_paise, is_featured, updated_at").order("updated_at", { ascending: false }).limit(300);
+  const { data } = await supabase.from("products").select("id, title, slug, product_type, status, price_paise, is_featured, is_sample, is_quote_only, updated_at").order("updated_at", { ascending: false }).limit(300);
   return (
     <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
       <table className="w-full text-left text-sm">
@@ -17,7 +17,7 @@ async function List() {
         <tbody className="divide-y divide-slate-100">
           {(data ?? []).map((p) => (
             <tr key={p.id}>
-              <td className="p-3"><Link href={`/admin/products/${p.id}`} className="font-medium text-blue-800 underline">{p.title}</Link>{p.is_featured ? <span className="ml-2 text-xs text-amber-800">★ featured</span> : null}</td>
+              <td className="p-3"><Link href={`/admin/products/${p.id}`} className="font-medium text-blue-800 underline">{p.title}</Link>{p.is_featured ? <span className="ml-2 text-xs text-amber-800">★ featured</span> : null}{p.is_sample ? <span className="ml-2 rounded bg-slate-200 px-1.5 py-0.5 text-xs text-slate-800">Sample</span> : null}{p.is_quote_only ? <span className="ml-2 rounded bg-violet-100 px-1.5 py-0.5 text-xs text-violet-900">Custom</span> : null}</td>
               <td className="p-3 capitalize">{p.product_type}</td>
               <td className="p-3 capitalize">{p.status}</td>
               <td className="p-3">{formatINR(p.price_paise)}</td>

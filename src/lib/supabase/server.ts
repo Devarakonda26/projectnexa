@@ -1,6 +1,7 @@
 import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { publicEnv } from "@/lib/env.public";
 
 /**
@@ -9,6 +10,8 @@ import { publicEnv } from "@/lib/env.public";
  * Create a new client per request; never share one across requests.
  */
 export async function createClient() {
+  // Everything this client reads is per-request data; never evaluate it at build time.
+  await connection();
   const cookieStore = await cookies();
   const env = publicEnv();
 

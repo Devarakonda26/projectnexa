@@ -26,6 +26,9 @@ done
 
 echo "==> seed"
 run -f supabase/seed.sql
+echo "==> sample projects (run twice: must be repeatable)"
+run -f supabase/seed_sample_projects.sql
+run -f supabase/seed_sample_projects.sql
 
 fail=0
 for t in tests/db/t_*.sql; do

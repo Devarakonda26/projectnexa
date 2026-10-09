@@ -1,5 +1,6 @@
 import "server-only";
 import { cache } from "react";
+import { connection } from "next/server";
 import { notFound, redirect } from "next/navigation";
 import { loginUrl } from "@/lib/auth/redirects";
 import { createClient } from "@/lib/supabase/server";
@@ -32,6 +33,8 @@ export class ForbiddenError extends Error {
 }
 
 export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
+  // Who is signed in differs per visitor, so this always runs per request, never at build time.
+  await connection();
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
   if (error || !data.user) return null;

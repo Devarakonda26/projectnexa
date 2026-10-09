@@ -6,7 +6,6 @@ const MESSAGES: Record<string, string> = {
   not_authenticated: "Please sign in again.",
   cart_empty: "Your cart is empty.",
   product_unavailable: "An item in your cart is no longer available. Please review your cart.",
-  already_purchased: "You already own one of the digital items in your cart. Remove it to continue.",
   address_required: "Choose a delivery address for your hardware items.",
   cod_not_available_for_digital: "Cash on delivery is not available with digital downloads.",
   cod_not_eligible: "Cash on delivery is not available for one of these items.",

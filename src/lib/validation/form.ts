@@ -5,6 +5,8 @@ export type FormState = {
   error?: string;
   message?: string;
   fieldErrors?: Record<string, string[] | undefined>;
+  /** What the user typed, sent back so the form does not lose their input after an error. */
+  values?: Record<string, string>;
 };
 
 /** Plain string fields from a FormData (files and non-strings are ignored). */
@@ -25,6 +27,10 @@ export function parseForm<S extends z.ZodType>(
   const flat = (result.error as z.ZodError).flatten?.() ?? { fieldErrors: {} };
   return {
     success: false,
-    state: { error: "Please fix the highlighted fields.", fieldErrors: flat.fieldErrors as FormState["fieldErrors"] },
+    state: {
+      error: "Please fix the highlighted fields.",
+      fieldErrors: flat.fieldErrors as FormState["fieldErrors"],
+      values: formToObject(formData),
+    },
   };
 }

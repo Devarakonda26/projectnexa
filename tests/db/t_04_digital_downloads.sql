@@ -52,10 +52,10 @@ begin
   perform test.assert(public.has_download_access(p_dig) = false, 'bob has no access to alice''s purchase');
   perform test.assert(test.count('select 1 from public.product_files') = 0, 'bob sees no download rows');
 
-  -- double purchase is refused
+  -- buying the same project again is allowed
   perform test.as_user(alice);
   insert into public.cart_items (user_id, product_id, quantity) values (alice, p_dig, 1);
-  perform test.throws('select public.place_order(null, ''upi'')', 'already_purchased');
+  perform test.assert(public.place_order(null, 'upi') is not null, 'repeat purchase of a digital project is allowed');
 
   -- refund revokes access
   perform test.as_user(admin);

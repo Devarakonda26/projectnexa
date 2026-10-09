@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { orderStatusSchema, productSchema, shipmentSchema, stockAdjustSchema, verifyPaymentSchema } from "@/lib/validation/admin";
+import { orderStatusSchema, productSchema, shipmentSchema, stockAdjustSchema, storeSettingsSchema, verifyPaymentSchema } from "@/lib/validation/admin";
 
 const B = "11111111-1111-4111-8111-111111111111";
 const base = { title: "ESP32 kit", slug: "esp32-kit", summary: "A kit for learning IoT", productType: "hardware", status: "draft", branchId: B, price: "1,299.50" };
@@ -44,5 +44,17 @@ describe("workflow schemas", () => {
     expect(stockAdjustSchema.safeParse({ productId: B, delta: "0", reason: "restock" }).success).toBe(false);
     expect(stockAdjustSchema.safeParse({ productId: B, delta: "-3", reason: "correction" }).success).toBe(true);
     expect(stockAdjustSchema.safeParse({ productId: B, delta: "1.5", reason: "restock" }).success).toBe(false);
+  });
+});
+
+describe("storeSettingsSchema", () => {
+  it("converts rupees to paise and allows zero", () => {
+    const r = storeSettingsSchema.parse({ shippingFee: "60", freeShippingFrom: "999", codMax: "0" });
+    expect(r).toEqual({ shippingFee: 6000, freeShippingFrom: 99900, codMax: 0 });
+  });
+  it("rejects blanks, words and negatives", () => {
+    expect(storeSettingsSchema.safeParse({ shippingFee: "", freeShippingFrom: "999", codMax: "0" }).success).toBe(false);
+    expect(storeSettingsSchema.safeParse({ shippingFee: "free", freeShippingFrom: "999", codMax: "0" }).success).toBe(false);
+    expect(storeSettingsSchema.safeParse({ shippingFee: "-5", freeShippingFrom: "999", codMax: "0" }).success).toBe(false);
   });
 });

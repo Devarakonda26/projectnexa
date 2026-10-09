@@ -32,11 +32,12 @@ export async function addToCartAction(_prev: FormState, formData: FormData): Pro
   const supabase = await createClient();
   const { data: product } = await supabase
     .from("products")
-    .select("id, product_type")
+    .select("id, product_type, is_quote_only")
     .eq("id", parsed.data.productId)
     .eq("status", "published")
     .maybeSingle();
   if (!product) return { error: "This item is no longer available." };
+  if (product.is_quote_only) return { error: "This is a custom service. Please request a quote instead." };
 
   // Digital packages are bought once per order; kits can be bought in quantity.
   const wanted = product.product_type === "digital" ? 1 : parsed.data.quantity;

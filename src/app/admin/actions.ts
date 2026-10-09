@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { adminErrorMessage, withAdmin } from "@/lib/admin/run";
 import {
   adminNoteSchema, branchSchema, categorySchema, milestonePaidSchema, milestoneSchema, milestoneStatusSchema,
-  orderStatusSchema, quoteSchema, rejectPaymentSchema, requestStatusSchema, shipmentSchema, stockAdjustSchema, verifyPaymentSchema,
+  orderStatusSchema, quoteSchema, rejectPaymentSchema, requestStatusSchema, shipmentSchema, stockAdjustSchema, storeSettingsSchema, verifyPaymentSchema,
 } from "@/lib/validation/admin";
 import { parseForm, type FormState } from "@/lib/validation/form";
 
@@ -181,5 +181,46 @@ export async function markMilestonePaidAction(_p: FormState, formData: FormData)
     if (error) return { error: adminErrorMessage(error) };
     revalidatePath("/admin", "layout");
     return done("Milestone marked as paid.");
+  })) as FormState;
+}
+
+// ---------------------------------------------------------------- store settings
+export async function saveStoreSettingsAction(_p: FormState, formData: FormData): Result {
+  return (await withAdmin(async ({ admin, supabase }) => {
+    const parsed = parseForm(storeSettingsSchema, formData);
+    if (!parsed.success) return parsed.state;
+    const d = parsed.data;
+    const rows: [string, number][] = [
+      ["shipping_flat_paise", d.shippingFee],
+      ["free_shipping_threshold_paise", d.freeShippingFrom],
+      ["cod_max_total_paise", d.codMax],
+    ];
+    for (const [key, value] of rows) {
+      const { data, error } = await supabase
+        .from("store_settings")
+        .update({ value, updated_at: new Date().toISOString(), updated_by: admin.id })
+        .eq("key", key)
+        .select("key");
+      if (error) return { error: adminErrorMessage(error) };
+      if (!data?.length) return { error: `Setting "${key}" was not found. Run the database setup again.` };
+    }
+    revalidatePath("/", "layout");
+    return done("Settings saved. New orders use these values straight away.");
+  })) as FormState;
+}
+
+// ---------------------------------------------------------------- sample listings
+/** Archives (hides) every published listing that is still flagged as a sample. Nothing is deleted; each can be re-published from its edit page. */
+export async function hideSampleProductsAction(): Result {
+  return (await withAdmin(async ({ supabase }) => {
+    const { data, error } = await supabase
+      .from("products")
+      .update({ status: "archived" })
+      .eq("is_sample", true)
+      .eq("status", "published")
+      .select("id");
+    if (error) return { error: adminErrorMessage(error) };
+    revalidatePath("/", "layout");
+    return done(`${data?.length ?? 0} sample listing(s) hidden from the shop.`);
   })) as FormState;
 }

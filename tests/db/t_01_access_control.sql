@@ -13,9 +13,9 @@ begin
 
   -- ---------- anonymous visitor
   perform test.as_anon();
-  perform test.assert(test.count('select 1 from public.products') = 12, 'anon sees the 12 published products');
-  perform test.assert(test.count('select 1 from public.branches') = 14, 'anon sees all branches');
-  perform test.assert(test.count('select 1 from public.public_stock_status') = 6, 'anon sees stock flags for hardware');
+  perform test.assert(test.count('select 1 from public.products') >= 12, 'anon sees the published products');
+  perform test.assert(test.count('select 1 from public.branches') >= 14, 'anon sees all branches');
+  perform test.assert(test.count('select 1 from public.public_stock_status') >= 6, 'anon sees stock flags for hardware');
   perform test.assert((select in_stock from public.public_stock_status s join public.products p on p.id = s.product_id where p.slug = 'ecg-sensor-kit') = false,
                       'out-of-stock product flagged');
   perform test.assert((select low_stock from public.public_stock_status s join public.products p on p.id = s.product_id where p.slug = 'arduino-weather-station-kit') = true,
@@ -35,11 +35,11 @@ begin
   perform test.as_postgres();
   update public.products set status = 'draft' where slug = 'g3-building-staad-analysis';
   perform test.as_anon();
-  perform test.assert(test.count('select 1 from public.products') = 11, 'draft product hidden from anon');
+  perform test.assert(test.count('select 1 from public.products where slug = ''g3-building-staad-analysis''') = 0, 'draft product hidden from anon');
   perform test.as_user(alice);
-  perform test.assert(test.count('select 1 from public.products') = 11, 'draft product hidden from customers');
+  perform test.assert(test.count('select 1 from public.products where slug = ''g3-building-staad-analysis''') = 0, 'draft product hidden from customers');
   perform test.as_user(admin);
-  perform test.assert(test.count('select 1 from public.products') = 12, 'admin sees draft products');
+  perform test.assert(test.count('select 1 from public.products where slug = ''g3-building-staad-analysis''') = 1, 'admin sees draft products');
 
   -- ---------- customer cannot manage the catalogue
   perform test.as_user(alice);

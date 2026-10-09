@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="biomedical engineering illustration">
+<title>biomedical engineering illustration</title>
+<defs>
+<linearGradient id="g560236885b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#132340"/><stop offset="1" stop-color="#0B1220"/></linearGradient>
+<radialGradient id="g560236885r" cx="0.5" cy="0.48" r="0.55"><stop offset="0" stop-color="#F87171" stop-opacity="0.34"/><stop offset="1" stop-color="#F87171" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="640" height="400" fill="url(#g560236885b)"/>
+<g stroke="#FFFFFF" stroke-opacity="0.045" stroke-width="1"><path d="M0 0V400" /><path d="M40 0V400" /><path d="M80 0V400" /><path d="M120 0V400" /><path d="M160 0V400" /><path d="M200 0V400" /><path d="M240 0V400" /><path d="M280 0V400" /><path d="M320 0V400" /><path d="M360 0V400" /><path d="M400 0V400" /><path d="M440 0V400" /><path d="M480 0V400" /><path d="M520 0V400" /><path d="M560 0V400" /><path d="M600 0V400" /><path d="M640 0V400" /><path d="M0 0H640" /><path d="M0 40H640" /><path d="M0 80H640" /><path d="M0 120H640" /><path d="M0 160H640" /><path d="M0 200H640" /><path d="M0 240H640" /><path d="M0 280H640" /><path d="M0 320H640" /><path d="M0 360H640" /><path d="M0 400H640" /></g>
+<rect width="640" height="400" fill="url(#g560236885r)"/>
+<g><g transform="translate(53.3 0.0) scale(0.667)"><path d="M110 330H260L300 240L350 430L400 180L450 400L490 320H690" fill="none" stroke="#F87171" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><path d="M110 330H260L300 240L350 430L400 180L450 400L490 320H690" fill="none" stroke="#E2E8F0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M400 520Q330 470 330 430Q330 395 365 395Q390 395 400 420Q410 395 435 395Q470 395 470 430Q470 470 400 520Z" fill="#F8717155" stroke="#F87171" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+</svg>

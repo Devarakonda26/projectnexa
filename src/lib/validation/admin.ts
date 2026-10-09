@@ -34,6 +34,39 @@ const tagList = (label: string) =>
     )
     .pipe(z.array(z.string().max(40, `${label}: each item must be at most 40 characters`)).max(30, `${label}: at most 30 items`));
 
+/** One item per line -> array (deduplicated blanks removed, max 20 lines of 200 characters). */
+const lineList = (label: string, max = 20) =>
+  z
+    .string()
+    .optional()
+    .transform((v) => (v ?? "").split(/\r?\n/).map((l) => l.replace(/[\u0000-\u001f\u007f]/g, "").trim()).filter(Boolean))
+    .pipe(z.array(z.string().max(200, `${label}: each line must be at most 200 characters`)).max(max, `${label}: at most ${max} lines`));
+
+/** "Question | Answer" per line -> [{q, a}] (max 12). */
+const faqLines = z
+  .string()
+  .optional()
+  .transform((v, ctx) => {
+    const out: { q: string; a: string }[] = [];
+    for (const raw of (v ?? "").split(/\r?\n/)) {
+      const line = raw.replace(/[\u0000-\u001f\u007f]/g, "").trim();
+      if (!line) continue;
+      const i = line.indexOf("|");
+      const q = i > 0 ? line.slice(0, i).trim() : "";
+      const a = i > 0 ? line.slice(i + 1).trim() : "";
+      if (!q || !a || q.length > 200 || a.length > 1000) {
+        ctx.addIssue({ code: "custom", message: "FAQ: write each line as  Question | Answer" });
+        return z.NEVER;
+      }
+      out.push({ q, a });
+    }
+    if (out.length > 12) {
+      ctx.addIssue({ code: "custom", message: "FAQ: at most 12 questions" });
+      return z.NEVER;
+    }
+    return out;
+  });
+
 export const productSchema = z
   .object({
     title: text(3, 160, "Title"),
@@ -52,11 +85,22 @@ export const productSchema = z
     weightGrams: optionalInt("Weight", 1, 100000),
     codEligible: checkbox,
     isFeatured: checkbox,
+    isSample: checkbox,
+    isQuoteOnly: checkbox,
+    sku: z.string().optional().transform((v) => (v?.trim() ? v.trim().toUpperCase() : null)).pipe(z.string().regex(/^[A-Z0-9][A-Z0-9-]{2,39}$/, "SKU: 3-40 capital letters, digits or dashes").nullable()),
+    subdomain: optionalText(80, "Subdomain"),
+    estimatedTime: optionalText(60, "Estimated time"),
+    features: lineList("Features"),
+    deliverables: lineList("Included items"),
+    softwareRequirements: lineList("Software requirements"),
+    hardwareRequirements: lineList("Hardware requirements"),
+    faq: faqLines,
     initialStock: optionalInt("Opening stock", 0, 100000),
     lowStockThreshold: optionalInt("Low-stock threshold", 0, 100000),
   })
   .superRefine((v, ctx) => {
     if (v.mrp !== undefined && v.mrp < v.price) ctx.addIssue({ code: "custom", path: ["mrp"], message: "MRP must be at least the price" });
+    if (v.isQuoteOnly && v.productType !== "digital") ctx.addIssue({ code: "custom", path: ["isQuoteOnly"], message: "Custom (quote-only) listings must use the Digital type" });
     if (v.codEligible && v.productType !== "hardware") ctx.addIssue({ code: "custom", path: ["codEligible"], message: "Cash on delivery is only for hardware" });
   });
 
@@ -138,3 +182,11 @@ export const milestoneStatusSchema = z.object({
   status: z.enum(["pending", "in_progress", "submitted"]),
 });
 export const milestonePaidSchema = z.object({ requestId: uuid, milestoneId: uuid, reference: text(3, 60, "Payment reference") });
+
+// ---------------------------------------------------------------- store settings
+/** Amounts typed in rupees; stored as integer paise. 0 is allowed (0 free-shipping = never free, 0 COD limit = COD off). */
+export const storeSettingsSchema = z.object({
+  shippingFee: rupees("Shipping fee"),
+  freeShippingFrom: rupees("Free-shipping threshold"),
+  codMax: rupees("COD limit"),
+});

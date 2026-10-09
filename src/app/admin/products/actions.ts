@@ -24,6 +24,9 @@ export async function saveProductAction(_p: FormState, formData: FormData): Prom
       price_paise: d.price, mrp_paise: d.mrp ?? null, difficulty: d.difficulty,
       tech_stack: d.techStack, tags: d.tags, weight_grams: d.productType === "hardware" ? d.weightGrams ?? null : null,
       cod_eligible: d.productType === "hardware" && d.codEligible, is_featured: d.isFeatured,
+      is_sample: d.isSample, is_quote_only: d.isQuoteOnly, sku: d.sku, subdomain: d.subdomain ?? null,
+      estimated_time: d.estimatedTime ?? null, features: d.features, deliverables: d.deliverables,
+      software_requirements: d.softwareRequirements, hardware_requirements: d.hardwareRequirements, faq: d.faq,
     };
 
     const id = formData.get("id");
