@@ -48,7 +48,22 @@ describe("security hygiene", () => {
     const bad = actionFiles
       .map(rel)
       .filter((f) => !f.startsWith("src/app/(auth)/"))
-      .filter((f) => !/assert(User|Admin)\(/.test(readFileSync(join(root, f), "utf8")));
+      .filter((f) => !/(assert(User|Admin)|withAdmin)\(/.test(readFileSync(join(root, f), "utf8")));
     expect(bad).toEqual([]);
+  });
+
+  it("every admin page re-checks admin rights itself (layouts do not re-run on navigation)", () => {
+    const pages = srcFiles.filter((f) => /src\/app\/admin\/.*page\.tsx$/.test(f.replaceAll("\\", "/")));
+    expect(pages.length).toBeGreaterThan(8);
+    const missing = pages.map(rel).filter((f) => !/requireAdmin\(/.test(readFileSync(join(root, f), "utf8")));
+    expect(missing).toEqual([]);
+  });
+
+  it("every protected customer page calls requireUser", () => {
+    const protectedPrefixes = ["src/app/account/", "src/app/orders/", "src/app/cart/", "src/app/checkout/", "src/app/custom-projects/new/", "src/app/custom-projects/requests/"];
+    const pages = srcFiles.map(rel).filter((f) => f.endsWith("page.tsx") && protectedPrefixes.some((p) => f.startsWith(p)));
+    expect(pages.length).toBeGreaterThan(5);
+    const missing = pages.filter((f) => !/requireUser\(/.test(readFileSync(join(root, f), "utf8")));
+    expect(missing).toEqual([]);
   });
 });
