@@ -1,0 +1,452 @@
+[
+    {
+        "to": "payment_submitted",
+        "from": "pending_payment",
+        "method": "upi",
+        "physical": false
+    },
+    {
+        "to": "payment_submitted",
+        "from": "pending_payment",
+        "method": "upi",
+        "physical": true
+    },
+    {
+        "to": "payment_submitted",
+        "from": "pending_payment",
+        "method": "bank_transfer",
+        "physical": false
+    },
+    {
+        "to": "payment_submitted",
+        "from": "pending_payment",
+        "method": "bank_transfer",
+        "physical": true
+    },
+    {
+        "to": "cancelled",
+        "from": "pending_payment",
+        "method": "upi",
+        "physical": false
+    },
+    {
+        "to": "cancelled",
+        "from": "pending_payment",
+        "method": "upi",
+        "physical": true
+    },
+    {
+        "to": "cancelled",
+        "from": "pending_payment",
+        "method": "bank_transfer",
+        "physical": false
+    },
+    {
+        "to": "cancelled",
+        "from": "pending_payment",
+        "method": "bank_transfer",
+        "physical": true
+    },
+    {
+        "to": "cancelled",
+        "from": "pending_payment",
+        "method": "cod",
+        "physical": false
+    },
+    {
+        "to": "cancelled",
+        "from": "pending_payment",
+        "method": "cod",
+        "physical": true
+    },
+    {
+        "to": "processing",
+        "from": "pending_confirmation",
+        "method": "cod",
+        "physical": false
+    },
+    {
+        "to": "processing",
+        "from": "pending_confirmation",
+        "method": "cod",
+        "physical": true
+    },
+    {
+        "to": "cancelled",
+        "from": "pending_confirmation",
+        "method": "cod",
+        "physical": false
+    },
+    {
+        "to": "cancelled",
+        "from": "pending_confirmation",
+        "method": "cod",
+        "physical": true
+    },
+    {
+        "to": "pending_payment",
+        "from": "payment_submitted",
+        "method": "upi",
+        "physical": false
+    },
+    {
+        "to": "pending_payment",
+        "from": "payment_submitted",
+        "method": "upi",
+        "physical": true
+    },
+    {
+        "to": "pending_payment",
+        "from": "payment_submitted",
+        "method": "bank_transfer",
+        "physical": false
+    },
+    {
+        "to": "pending_payment",
+        "from": "payment_submitted",
+        "method": "bank_transfer",
+        "physical": true
+    },
+    {
+        "to": "paid",
+        "from": "payment_submitted",
+        "method": "upi",
+        "physical": false
+    },
+    {
+        "to": "paid",
+        "from": "payment_submitted",
+        "method": "upi",
+        "physical": true
+    },
+    {
+        "to": "paid",
+        "from": "payment_submitted",
+        "method": "bank_transfer",
+        "physical": false
+    },
+    {
+        "to": "paid",
+        "from": "payment_submitted",
+        "method": "bank_transfer",
+        "physical": true
+    },
+    {
+        "to": "processing",
+        "from": "paid",
+        "method": "upi",
+        "physical": true
+    },
+    {
+        "to": "processing",
+        "from": "paid",
+        "method": "bank_transfer",
+        "physical": true
+    },
+    {
+        "to": "processing",
+        "from": "paid",
+        "method": "cod",
+        "physical": true
+    },
+    {
+        "to": "completed",
+        "from": "paid",
+        "method": "upi",
+        "physical": false
+    },
+    {
+        "to": "completed",
+        "from": "paid",
+        "method": "bank_transfer",
+        "physical": false
+    },
+    {
+        "to": "completed",
+        "from": "paid",
+        "method": "cod",
+        "physical": false
+    },
+    {
+        "to": "refunded",
+        "from": "paid",
+        "method": "upi",
+        "physical": false
+    },
+    {
+        "to": "refunded",
+        "from": "paid",
+        "method": "upi",
+        "physical": true
+    },
+    {
+        "to": "refunded",
+        "from": "paid",
+        "method": "bank_transfer",
+        "physical": false
+    },
+    {
+        "to": "refunded",
+        "from": "paid",
+        "method": "bank_transfer",
+        "physical": true
+    },
+    {
+        "to": "refunded",
+        "from": "paid",
+        "method": "cod",
+        "physical": false
+    },
+    {
+        "to": "refunded",
+        "from": "paid",
+        "method": "cod",
+        "physical": true
+    },
+    {
+        "to": "shipped",
+        "from": "processing",
+        "method": "upi",
+        "physical": true
+    },
+    {
+        "to": "shipped",
+        "from": "processing",
+        "method": "bank_transfer",
+        "physical": true
+    },
+    {
+        "to": "shipped",
+        "from": "processing",
+        "method": "cod",
+        "physical": true
+    },
+    {
+        "to": "cancelled",
+        "from": "processing",
+        "method": "cod",
+        "physical": false
+    },
+    {
+        "to": "cancelled",
+        "from": "processing",
+        "method": "cod",
+        "physical": true
+    },
+    {
+        "to": "refunded",
+        "from": "processing",
+        "method": "upi",
+        "physical": false
+    },
+    {
+        "to": "refunded",
+        "from": "processing",
+        "method": "upi",
+        "physical": true
+    },
+    {
+        "to": "refunded",
+        "from": "processing",
+        "method": "bank_transfer",
+        "physical": false
+    },
+    {
+        "to": "refunded",
+        "from": "processing",
+        "method": "bank_transfer",
+        "physical": true
+    },
+    {
+        "to": "refunded",
+        "from": "processing",
+        "method": "cod",
+        "physical": false
+    },
+    {
+        "to": "refunded",
+        "from": "processing",
+        "method": "cod",
+        "physical": true
+    },
+    {
+        "to": "delivered",
+        "from": "shipped",
+        "method": "upi",
+        "physical": false
+    },
+    {
+        "to": "delivered",
+        "from": "shipped",
+        "method": "upi",
+        "physical": true
+    },
+    {
+        "to": "delivered",
+        "from": "shipped",
+        "method": "bank_transfer",
+        "physical": false
+    },
+    {
+        "to": "delivered",
+        "from": "shipped",
+        "method": "bank_transfer",
+        "physical": true
+    },
+    {
+        "to": "delivered",
+        "from": "shipped",
+        "method": "cod",
+        "physical": false
+    },
+    {
+        "to": "delivered",
+        "from": "shipped",
+        "method": "cod",
+        "physical": true
+    },
+    {
+        "to": "refunded",
+        "from": "shipped",
+        "method": "upi",
+        "physical": false
+    },
+    {
+        "to": "refunded",
+        "from": "shipped",
+        "method": "upi",
+        "physical": true
+    },
+    {
+        "to": "refunded",
+        "from": "shipped",
+        "method": "bank_transfer",
+        "physical": false
+    },
+    {
+        "to": "refunded",
+        "from": "shipped",
+        "method": "bank_transfer",
+        "physical": true
+    },
+    {
+        "to": "refunded",
+        "from": "shipped",
+        "method": "cod",
+        "physical": false
+    },
+    {
+        "to": "refunded",
+        "from": "shipped",
+        "method": "cod",
+        "physical": true
+    },
+    {
+        "to": "completed",
+        "from": "delivered",
+        "method": "upi",
+        "physical": false
+    },
+    {
+        "to": "completed",
+        "from": "delivered",
+        "method": "upi",
+        "physical": true
+    },
+    {
+        "to": "completed",
+        "from": "delivered",
+        "method": "bank_transfer",
+        "physical": false
+    },
+    {
+        "to": "completed",
+        "from": "delivered",
+        "method": "bank_transfer",
+        "physical": true
+    },
+    {
+        "to": "completed",
+        "from": "delivered",
+        "method": "cod",
+        "physical": false
+    },
+    {
+        "to": "completed",
+        "from": "delivered",
+        "method": "cod",
+        "physical": true
+    },
+    {
+        "to": "refunded",
+        "from": "delivered",
+        "method": "upi",
+        "physical": false
+    },
+    {
+        "to": "refunded",
+        "from": "delivered",
+        "method": "upi",
+        "physical": true
+    },
+    {
+        "to": "refunded",
+        "from": "delivered",
+        "method": "bank_transfer",
+        "physical": false
+    },
+    {
+        "to": "refunded",
+        "from": "delivered",
+        "method": "bank_transfer",
+        "physical": true
+    },
+    {
+        "to": "refunded",
+        "from": "delivered",
+        "method": "cod",
+        "physical": false
+    },
+    {
+        "to": "refunded",
+        "from": "delivered",
+        "method": "cod",
+        "physical": true
+    },
+    {
+        "to": "refunded",
+        "from": "completed",
+        "method": "upi",
+        "physical": false
+    },
+    {
+        "to": "refunded",
+        "from": "completed",
+        "method": "upi",
+        "physical": true
+    },
+    {
+        "to": "refunded",
+        "from": "completed",
+        "method": "bank_transfer",
+        "physical": false
+    },
+    {
+        "to": "refunded",
+        "from": "completed",
+        "method": "bank_transfer",
+        "physical": true
+    },
+    {
+        "to": "refunded",
+        "from": "completed",
+        "method": "cod",
+        "physical": false
+    },
+    {
+        "to": "refunded",
+        "from": "completed",
+        "method": "cod",
+        "physical": true
+    }
+]

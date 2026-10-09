@@ -31,8 +31,12 @@ end $$;
 create function public.handle_new_user() returns trigger
 language plpgsql security definer set search_path = public, pg_temp as $$
 begin
-  insert into public.profiles (id, full_name)
-  values (new.id, nullif(left(btrim(coalesce(new.raw_user_meta_data ->> 'full_name', '')), 120), ''))
+  -- Signup metadata is attacker-controlled. Copy ONLY name and phone, each validated; the role is always 'customer'.
+  insert into public.profiles (id, full_name, phone, role)
+  values (new.id,
+          nullif(left(btrim(coalesce(new.raw_user_meta_data ->> 'full_name', '')), 120), ''),
+          case when (new.raw_user_meta_data ->> 'phone') ~ '^[6-9][0-9]{9}$' then new.raw_user_meta_data ->> 'phone' end,
+          'customer')
   on conflict (id) do nothing;
   return new;
 end $$;
