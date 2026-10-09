@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SiteFooter, SiteHeader } from "@/components/shop/SiteHeader";
 
 export const metadata: Metadata = {
   title: {
@@ -13,7 +14,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-white focus:p-2">
+          Skip to content
+        </a>
+        <SiteHeader />
+        <div id="main" className="flex-1">{children}</div>
+        <SiteFooter />
+      </body>
     </html>
   );
 }
