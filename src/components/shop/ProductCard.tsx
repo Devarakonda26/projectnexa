@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { DIFFICULTY_LABEL, productKindLabel, productKindTone } from "@/lib/catalogue/labels";
 import type { ProductCard as Card } from "@/lib/catalogue/queries";
-import { formatINR, percentOff } from "@/lib/money";
 import { PLACEHOLDER_IMAGE, productImageUrl } from "@/lib/storage/public-urls";
 import { SmartImage } from "./SmartImage";
 
@@ -17,19 +16,9 @@ export function ProductImage({ path, alt, className = "", priority = false }: { 
   return <SmartImage src={productImageUrl(path) ?? PLACEHOLDER_IMAGE} alt={alt} className={`object-cover ${className}`} priority={priority} />;
 }
 
-export function PriceLine({ p, size = "md" }: { p: Pick<Card, "price_paise" | "mrp_paise" | "is_quote_only">; size?: "md" | "lg" }) {
-  if (p.is_quote_only) return <p className={`${size === "lg" ? "text-2xl" : "text-base"} font-semibold text-slate-900`}>Quote on request</p>;
-  const off = percentOff(p.price_paise, p.mrp_paise);
-  return (
-    <p className={`${size === "lg" ? "text-3xl" : "text-lg"} font-bold text-slate-900`}>
-      {formatINR(p.price_paise)}
-      {off ? (
-        <span className={`ml-2 font-normal text-slate-500 ${size === "lg" ? "text-base" : "text-sm"}`}>
-          <s>{formatINR(p.mrp_paise!)}</s> <span className="font-medium text-green-700">{off}% off</span>
-        </span>
-      ) : null}
-    </p>
-  );
+/** Prices are hidden across the public store for now, so this renders nothing. */
+export function PriceLine(_props: { p: Pick<Card, "price_paise" | "mrp_paise" | "is_quote_only">; size?: "md" | "lg" }) {
+  return null;
 }
 
 export function ProductCardView({ product }: { product: Card }) {

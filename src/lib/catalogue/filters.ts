@@ -5,6 +5,7 @@ export type SortOption = (typeof SORT_OPTIONS)[number];
 
 const slug = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/).max(80);
 const first = (v: unknown) => (Array.isArray(v) ? v[0] : v);
+const blank = (v: unknown) => (v === "" || v === null ? undefined : first(v));
 const opt = <T extends z.ZodType>(s: T) => z.preprocess(first, s.optional().catch(undefined));
 
 export const PAGE_SIZE = 12;
@@ -17,8 +18,8 @@ export const listingParamsSchema = z.object({
   difficulty: opt(z.enum(["beginner", "intermediate", "advanced"])),
   sort: opt(z.enum(SORT_OPTIONS)),
   page: z.preprocess(first, z.coerce.number().int().min(1).max(500).catch(1)),
-  min: z.preprocess(first, z.coerce.number().int().min(0).max(1_000_000).optional().catch(undefined)),
-  max: z.preprocess(first, z.coerce.number().int().min(0).max(1_000_000).optional().catch(undefined)),
+  min: z.preprocess(blank, z.coerce.number().int().min(0).max(1_000_000).optional().catch(undefined)),
+  max: z.preprocess(blank, z.coerce.number().int().min(0).max(1_000_000).optional().catch(undefined)),
 });
 
 export type ListingParams = z.output<typeof listingParamsSchema>;

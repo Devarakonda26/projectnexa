@@ -39,6 +39,13 @@ describe("parseListingParams", () => {
     const p = parseListingParams({ type: ["hardware", "digital"], page: "3", min: "100", branch: "cse" });
     expect(p).toMatchObject({ type: "hardware", page: 3, min: 100, branch: "cse" });
   });
+  it("treats blank form fields as not set (an empty max must not become 0)", () => {
+    const p = parseListingParams({ q: "", branch: "", type: "", difficulty: "", min: "", max: "", sort: "featured" });
+    expect(p.min).toBeUndefined();
+    expect(p.max).toBeUndefined();
+    expect(p.branch).toBeUndefined();
+    expect(p.type).toBeUndefined();
+  });
 });
 
 describe("listingHref", () => {

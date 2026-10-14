@@ -11,11 +11,9 @@ export const metadata = {
   description: "Browse digital engineering projects, hardware kits and custom-built solutions by branch, domain and type.",
 };
 
-const SORT_LABEL: Record<(typeof SORT_OPTIONS)[number], string> = {
+const SORT_LABEL: Record<string, string> = {
   featured: "Featured",
   newest: "Newest",
-  price_asc: "Price: low to high",
-  price_desc: "Price: high to low",
 };
 
 const TYPE_TABS = [
@@ -34,7 +32,7 @@ async function Listing({ searchParams }: { searchParams: Promise<Record<string, 
     searchProducts(params),
     params.branch ? getBranch(params.branch) : Promise.resolve(null),
   ]);
-  const activeFilters = [params.q, params.branch, params.category, params.type, params.difficulty, params.min, params.max].filter((v) => v !== undefined && v !== "").length;
+  const activeFilters = [params.q, params.branch, params.category, params.type, params.difficulty ].filter((v) => v !== undefined && v !== "").length;
 
   const filters = (
     <form method="get" action="/products" className="space-y-4 text-sm">
@@ -68,20 +66,10 @@ async function Listing({ searchParams }: { searchParams: Promise<Record<string, 
           <option value="advanced">Advanced</option>
         </select>
       </div>
-      <div className="grid grid-cols-2 gap-2">
-        <div>
-          <label htmlFor="min" className="mb-1 block font-medium text-slate-800">Min ₹</label>
-          <input id="min" name="min" type="number" inputMode="numeric" min={0} max={1000000} defaultValue={params.min ?? ""} className={field} />
-        </div>
-        <div>
-          <label htmlFor="max" className="mb-1 block font-medium text-slate-800">Max ₹</label>
-          <input id="max" name="max" type="number" inputMode="numeric" min={0} max={1000000} defaultValue={params.max ?? ""} className={field} />
-        </div>
-      </div>
       <div>
         <label htmlFor="sort" className="mb-1 block font-medium text-slate-800">Sort by</label>
         <select id="sort" name="sort" defaultValue={params.sort ?? "featured"} className={field}>
-          {SORT_OPTIONS.map((s) => <option key={s} value={s}>{SORT_LABEL[s]}</option>)}
+          {SORT_OPTIONS.filter((s) => s !== "price_asc" && s !== "price_desc").map((s) => <option key={s} value={s}>{SORT_LABEL[s]}</option>)}
         </select>
       </div>
       <button className="w-full rounded-lg bg-blue-600 px-3 py-2.5 font-semibold text-white hover:bg-blue-700">Apply filters</button>
