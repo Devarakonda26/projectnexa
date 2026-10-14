@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     template: "%s | ProjectNexa",
   },
   description:
-    "Digital project packages, hardware kits and custom-built engineering projects for CSE, IT, ECE, EEE, Mechanical, Civil, AI/Data Science and Robotics students in India.",
+    "Digital project packages, hardware kits and custom-built engineering projects for CSE, IT, ECE, EEE and AI/Data Science students in India.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

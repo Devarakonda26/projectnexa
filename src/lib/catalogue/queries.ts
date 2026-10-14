@@ -30,6 +30,12 @@ export type ProductCard = {
 const CARD_COLUMNS =
   "id, slug, title, summary, product_type, is_quote_only, is_sample, price_paise, mrp_paise, difficulty, tech_stack, cover_image_path, is_featured, branch:branches(slug, short_name), category:categories(slug, name)";
 
+/**
+ * Branches the store does not show for now. To bring one back, delete its slug from this list.
+ * (Their products are not touched; hide those from Admin → Products if you want them gone too.)
+ */
+export const HIDDEN_BRANCH_SLUGS: readonly string[] = ["mechanical", "civil", "robotics", "aerospace", "biomedical", "chemical"];
+
 /** Public client: anon key + cookies, RLS limits everything to published rows. */
 export async function listBranches(): Promise<Branch[]> {
   const supabase = await createClient();
@@ -39,10 +45,11 @@ export async function listBranches(): Promise<Branch[]> {
     .eq("is_active", true)
     .order("sort_order")
     .order("name");
-  return (data ?? []) as Branch[];
+  return ((data ?? []) as Branch[]).filter((b) => !HIDDEN_BRANCH_SLUGS.includes(b.slug));
 }
 
 export async function getBranch(slug: string) {
+  if (HIDDEN_BRANCH_SLUGS.includes(slug)) return null;
   const supabase = await createClient();
   const { data: branch } = await supabase
     .from("branches")

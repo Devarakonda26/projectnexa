@@ -9,13 +9,13 @@ export const SITE = {
   legalName: "ProjectNexa (add your registered business name)",
   /** Full postal address of the business. */
   address: "Add your business address, city, state, PIN code",
-  supportEmail: "support@example.com",
-  supportPhone: "+91 00000 00000",
+  supportEmail: "eceboys246@gmail.com",
+  supportPhone: "+91 93914 07874",
   /** Support hours shown to customers. */
   supportHours: "Monday to Saturday, 10:00 am to 6:00 pm IST",
   grievanceOfficer: {
     name: "Add the grievance officer's name",
-    email: "support@example.com",
+    email: "eceboys246@gmail.com",
   },
   /** Date shown as "Last updated" on the policy pages. Change it whenever you edit a policy. */
   policiesUpdated: "9 October 2026",

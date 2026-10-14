@@ -1,18 +1,12 @@
 /** Static marketing copy for the home and About pages. No testimonials, ratings, sales figures or awards appear anywhere here. */
 
-/** The 12 branch cards on the home page. IoT is a topic across branches, so it opens a search instead of a branch page. */
+/** The branch cards on the home page. IoT is a topic across branches, so it opens a search instead of a branch page. */
 export const HOME_BRANCHES: { slug: string; label: string; blurb: string; href: string }[] = [
   { slug: "cse", label: "CSE", blurb: "Web, apps, security and software systems", href: "/branches/cse" },
   { slug: "ece", label: "ECE", blurb: "Embedded, signals, VLSI and communication", href: "/branches/ece" },
   { slug: "eee", label: "EEE", blurb: "Power, energy, drives and control", href: "/branches/eee" },
-  { slug: "mechanical", label: "Mechanical", blurb: "Design, thermal and manufacturing", href: "/branches/mechanical" },
-  { slug: "civil", label: "Civil", blurb: "Structures, transport and environment", href: "/branches/civil" },
   { slug: "ai-data-science", label: "AI & Data Science", blurb: "Machine learning, vision and analytics", href: "/branches/ai-data-science" },
-  { slug: "robotics", label: "Robotics", blurb: "Robots, manipulators and automation", href: "/branches/robotics" },
   { slug: "iot", label: "IoT", blurb: "Connected sensors, devices and dashboards", href: "/products?q=iot" },
-  { slug: "aerospace", label: "Aerospace", blurb: "Drones, flight control and telemetry", href: "/branches/aerospace" },
-  { slug: "biomedical", label: "Biomedical", blurb: "Medical instrumentation and monitoring", href: "/branches/biomedical" },
-  { slug: "chemical", label: "Chemical", blurb: "Process simulation and plant design", href: "/branches/chemical" },
   { slug: "agricultural", label: "Agricultural", blurb: "Smart farming and irrigation", href: "/branches/agricultural" },
 ];
 
@@ -22,10 +16,8 @@ export const POPULAR_DOMAINS: { label: string; q: string }[] = [
   { label: "Embedded systems", q: "embedded" },
   { label: "Computer vision", q: "vision" },
   { label: "Renewable energy", q: "solar" },
-  { label: "Robotics", q: "robot" },
   { label: "Web development", q: "web" },
   { label: "Cybersecurity", q: "security" },
-  { label: "Drones", q: "drone" },
   { label: "Smart farming", q: "farm" },
 ];
 

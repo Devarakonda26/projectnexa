@@ -11,7 +11,7 @@ export default function CustomProjectsPage() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
       <h1 className="text-3xl font-bold">Custom engineering projects</h1>
-      <p className="mt-3 text-slate-700">Need something that is not in our catalogue? We design and build projects to your specification across CSE, IT, ECE, EEE, Mechanical, Civil, AI/Data Science and Robotics.</p>
+      <p className="mt-3 text-slate-700">Need something that is not in our catalogue? We design and build projects to your specification across CSE, IT, ECE, EEE and AI/Data Science.</p>
       <ol className="mt-8 space-y-4">
         {steps.map(([title, body], i) => (
           <li key={title} className="rounded-lg border border-slate-200 bg-white p-4">
